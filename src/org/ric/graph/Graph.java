@@ -40,6 +40,18 @@ public class Graph {
 		return -1;
 	}
 
+	public void show() {
+		for (int i = 0; i < verticesCount; i++) {
+			for (int j = 0; j < verticesCount; j++) {
+				if (i == j || adjacencyMatrix[i][j] == 0)
+					continue;
+				System.out.printf("%c terhubung dengan %c dengan bobot %d%n",
+						vertices[i].label, vertices[j].label,
+						adjacencyMatrix[i][j]);
+			}
+		}
+	}
+
 	public static class Vertex {
 		public char label;
 		private boolean visited = false;
@@ -48,4 +60,5 @@ public class Graph {
 			label = c;
 		}
 	}
+
 }
