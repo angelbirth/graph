@@ -1,5 +1,7 @@
 package org.ric.graph;
 
+import java.util.Stack;
+
 public class Graph {
 	private static final int MAX_VERTEX = 10;
 	private Vertex[] vertices;
@@ -22,6 +24,8 @@ public class Graph {
 	}
 
 	public void addEdge(int from, int to, int weight) {
+		if (from >= verticesCount || to >= verticesCount)
+			throw new IllegalArgumentException("wrong index");
 		adjacencyMatrix[from][to] = weight;
 		adjacencyMatrix[to][from] = weight;
 	}
@@ -29,7 +33,11 @@ public class Graph {
 	public void addEdge(char from, char to, int weight) {
 		int f = indexOf(from);
 		int t = indexOf(to);
-		addEdge(f, t, weight);
+		try {
+			addEdge(f, t, weight);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("vertex not found", e);
+		}
 	}
 
 	private int indexOf(char label) {
@@ -48,6 +56,23 @@ public class Graph {
 				System.out.printf("%c terhubung dengan %c dengan bobot %d%n",
 						vertices[i].label, vertices[j].label,
 						adjacencyMatrix[i][j]);
+			}
+		}
+	}
+
+	public void dfs() {
+		int seed = 0;
+		Stack<Integer> s = new Stack<>();
+		s.push(seed);
+		while (!s.isEmpty()) {
+			int temp = s.pop();
+			if (!vertices[temp].visited) {
+				System.out.printf("%c ", vertices[temp].label);
+				vertices[temp].visited = true;
+			}
+			for (int i = verticesCount - 1; i >= 0; i--) {
+				if (adjacencyMatrix[temp][i] != 0 && !vertices[i].visited)
+					s.push(i);
 			}
 		}
 	}
